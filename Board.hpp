@@ -26,7 +26,7 @@ private:
     Bound bound;
     std::map<std::tuple<unsigned int, unsigned int>, char>
         board;
-    char &charAt(unsigned int x, unsigned int y);
+    void setCharAt(unsigned int x, unsigned int y, char c);
     char charAt(unsigned int x, unsigned int y) const;
 
     void updateBound(unsigned long start_x, unsigned long start_y, unsigned long size_x, unsigned long size_y);
