@@ -20,12 +20,19 @@ int main() {
     // prints "_b_" (starts at row 99 which is empty; then at row 100 there is "b"; then row 101 is empty again).
     board.post(/*row=*/99, /*column=*/202, Direction::Vertical, "xyz");
     cout << board.read(/*row=*/100, /*column=*/200, Direction::Horizontal, /*length=*/6) << endl;
+
+    // cout << endl;
+    // for (unsigned int y = 98; y < 103; y++) {
+    //     cout << board.read(y, 199, Direction::Horizontal, 6) << endl;
+    // }
+
+    //cout << board.read(99, 202, Direction::Vertical, 3) << endl;
     // prints "abyd__" (First letters are ab; then y from the "xyz"; then d; then two empty cells).
 
     board.show(); // shows the board in a reasonable way. For example:
-                  //    98:  _________
-                  //    99:  ____x____
-                  //    100: __abyd___
-                  //    101: ____z____
-                  //    102: _________
+    //    98:  _________
+    //    99:  ____x____
+    //    100: __abyd___
+    //    101: ____z____
+    //    102: _________
 }
