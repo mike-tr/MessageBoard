@@ -42,12 +42,6 @@ void Board::updateBound(ulong start_x, ulong start_y, ulong size_x, ulong size_y
         bound.min_y = start_y;
     }
 
-    if (size_x == 0) {
-        size_x = 1;
-    } else if (size_y == 0) {
-        size_y = 1;
-    }
-
     if (bound.size_x < size_x) {
         bound.size_x = size_x;
     }
@@ -65,19 +59,18 @@ void Board::post(uint row, uint column, Direction direction, const std::string &
         throw invalid_argument{"Cannot post message of length : 0"};
     }
 
-    uint addx = direction == Direction::Horizontal ? 1 : 0;
-    uint addy = direction == Direction::Vertical ? 1 : 0;
-
-    updateBound(column, row, length * addx, length * addy);
-
-    for (uint i = 0; i < length; i++) {
-        uint x = column + i * addx;
-        uint y = row + i * addy;
-
-        //cout << "post :: " << (int)direction << " :: " << x << " ," << y;
-
-        charAt(x, y) = message.at(i);
-        //cout << "c : " << charAt(x, y) << endl;
+    if (direction == Direction::Horizontal) {
+        updateBound(column, row, length, 1);
+        for (uint i = 0; i < length; i++) {
+            uint x = column + i;
+            charAt(x, row) = message.at(i);
+        }
+    } else {
+        updateBound(column, row, 1, length);
+        for (uint i = 0; i < length; i++) {
+            uint y = row + i;
+            charAt(column, y) = message.at(i);
+        }
     }
 }
 
@@ -85,18 +78,20 @@ std::string Board::read(uint row, uint column, Direction direction, uint length)
     if (length == 0) {
         throw invalid_argument{"Cannot read message of length : 0"};
     }
-    uint addx = direction == Direction::Horizontal ? 1 : 0;
-    uint addy = direction == Direction::Vertical ? 1 : 0;
 
     string message;
-    for (uint i = 0; i < length; i++) {
-        uint x = column + i * addx;
-        uint y = row + i * addy;
-
-        message += charAt(x, y);
-
-        // cout << "read :: " << (int)direction << " :: " << x << " ," << y << " c : " << charAt(x, y) << endl;
+    if (direction == Direction::Horizontal) {
+        for (uint i = 0; i < length; i++) {
+            uint x = column + i;
+            message += charAt(x, row);
+        }
+    } else {
+        for (uint i = 0; i < length; i++) {
+            uint y = row + i;
+            message += charAt(column, y);
+        }
     }
+
     return message;
 }
 
