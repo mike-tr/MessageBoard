@@ -13,17 +13,133 @@
 #include "doctest.h"
 using namespace ariel;
 
+#include <cstdlib>
+#include <ctime>
+#include <iostream>
 #include <string>
 using namespace std;
 
-TEST_CASE("Good board code") {
-    //CHECK(snowman(11114411) == string("_===_\n(.,.)\n( : )\n( : )"));
-    /* Add more checks here */
+const int number_of_tests = 10;
+const int range = 'z' - '0';
+
+TEST_CASE("Test message length and content") {
+    srand(time(nullptr));
+
+    string empty = "";
+    string message = "";
+    for (unsigned int i = 1; i < number_of_tests + 1; i++) {
+        Board board;
+        message += '0' + rand() % range;
+        empty += "_";
+        unsigned int rand_x = (unsigned int)rand();
+        unsigned int rand_y = (unsigned int)rand();
+
+        //cout << i << " :: " << message << " :: l : " << message.length() << ", l2 :" << empty.length() << endl;
+
+        // check that the empty string is of the right length
+        CHECK(board.read(rand_x, rand_y, Direction::Horizontal, i).length() == i);
+        CHECK(board.read(rand_x, rand_y, Direction::Vertical, i).length() == i);
+
+        // check that the empty string is indeed full of underlines.
+        CHECK(board.read(rand_x, rand_y, Direction::Horizontal, i) == empty);
+        CHECK(board.read(rand_x, rand_y, Direction::Vertical, i) == empty);
+
+        // print abc vertically this b will be overwritten.
+        string m1 = "abc";
+        board.post(rand_x, rand_y + 1, Direction::Vertical, m1);
+
+        // post the message horizontally and read it.
+        board.post(rand_x, rand_y, Direction::Horizontal, message);
+        CHECK(board.read(rand_x, rand_y, Direction::Horizontal, i) == message);
+        CHECK(board.read(rand_x - 1, rand_y, Direction::Horizontal, i + 2) == ("_" + message + "_"));
+
+        // read the overwritten "abc" message.
+        m1.at(1) = message.at(0);
+        CHECK(board.read(rand_x, rand_y + 1, Direction::Vertical, 3) == m1);
+
+        // post message "abc" that will be overwriten on the b
+        m1 = "abc";
+        board.post(rand_x - 1, rand_y, Direction::Horizontal, m1);
+
+        // Post message and check message
+        board.post(rand_x, rand_y, Direction::Vertical, message);
+        CHECK(board.read(rand_x, rand_y, Direction::Vertical, i) == message);
+        CHECK(board.read(rand_x, rand_y - 1, Direction::Vertical, i + 2) == ("_" + message + "_"));
+
+        // check that the new message "abc" we printed is indeed overwriten
+        m1.at(1) = message.at(0);
+        CHECK(board.read(rand_x - 1, rand_y, Direction::Horizontal, 3) == m1);
+    }
 }
 
-TEST_CASE("Bad board code") {
-    //CHECK_THROWS(snowman(555));
-    /* Add more checks here */
+TEST_CASE("Test throw length 0") {
+    /**
+     * we do not want to allow posting empty string, and we dont want to allow reading string of size 0.
+     * the latter might be possible, but posting empty string is a big NO NO.
+     * */
+    Board board;
+    for (unsigned int i = 1; i < number_of_tests + 1; i++) {
+        unsigned int rand_x = (unsigned int)rand();
+        unsigned int rand_y = (unsigned int)rand();
+
+        CHECK_THROWS(board.read(rand_x, rand_y, Direction::Vertical, 0));
+        CHECK_THROWS(board.read(rand_x, rand_y, Direction::Horizontal, 0));
+
+        CHECK_THROWS(board.post(rand_x, rand_y, Direction::Horizontal, ""));
+        CHECK_THROWS(board.post(rand_x, rand_y, Direction::Horizontal, ""));
+    }
+}
+
+TEST_CASE("Test random mamble wrong direction") {
+    /* *
+    * in this test we will check if maybe the post are in the wrong direction.
+    */
+
+    for (unsigned int i = 0; i < number_of_tests; i++) {
+        Board board;
+        unsigned int rand_x = (unsigned int)rand();
+        unsigned int rand_y = (unsigned int)rand();
+
+        string msg = "abcd";
+        string empty = "a___";
+
+        board.post(rand_x, rand_y, Direction::Horizontal, msg);
+        CHECK(board.read(rand_x, rand_y, Direction::Vertical, 4) == empty);
+        CHECK(board.read(rand_x, rand_y, Direction::Horizontal, 4) == msg);
+
+        board.post(rand_x, rand_y, Direction::Horizontal, "ffff");
+        board.post(rand_x, rand_y, Direction::Vertical, msg);
+
+        CHECK(board.read(rand_x, rand_y, Direction::Vertical, 4) == msg);
+        CHECK(board.read(rand_x, rand_y, Direction::Horizontal, 4) == "afff");
+    }
+}
+
+TEST_CASE("END OF THE INTEGER") {
+    /**
+     * this test check's whether the board is indeed infinite.
+     * a.k.a it should be possible to read from -1 the last index.
+     * */
+
+    string empty = "";
+    for (unsigned int i = 1; i < number_of_tests; i++) {
+        Board board;
+        unsigned int rand_x = (unsigned int)rand();
+        unsigned int rand_y = (unsigned int)rand();
+
+        unsigned int max_v = (unsigned int)(-1);
+
+        empty += "_";
+        CHECK(board.read(rand_x, max_v, Direction::Vertical, i) == empty);
+        CHECK(board.read(max_v, rand_y, Direction::Vertical, i) == empty);
+
+        // POST on the edge of the screen!
+        board.post(rand_x, max_v, Direction::Vertical, "abc");
+        CHECK(board.read(rand_x, max_v, Direction::Vertical, 3) == "abc");
+
+        board.post(max_v, rand_y, Direction::Horizontal, "abc");
+        CHECK(board.read(max_v, rand_y, Direction::Horizontal, 3) == "abc");
+    }
 }
 
 /* Add more test cases here */
