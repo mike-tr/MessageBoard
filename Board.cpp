@@ -7,11 +7,14 @@ using namespace std;
 namespace ariel {
 
 char Board::empty_val = '_';
+
+typedef unsigned int uint;
+typedef unsigned long ulong;
 /**
  * this method return referense to the character on the given x,y;
  * returns 0 if its empty.
  * */
-char &Board::charAt(unsigned int x, unsigned int y) {
+char &Board::charAt(uint x, uint y) {
     // char &c = board[make_tuple(x, y)];
     // if (c == 0) {
     //     c = empty_val;
@@ -22,7 +25,7 @@ char &Board::charAt(unsigned int x, unsigned int y) {
 /**
  * this method returns the actuall character on x,y but if its empty it will return "_";
  * */
-char Board::charAt(unsigned int x, unsigned int y) const {
+char Board::charAt(uint x, uint y) const {
     auto key = make_tuple(x, y);
     if (board.count(key) == 1) {
         return board.at(key);
@@ -30,7 +33,7 @@ char Board::charAt(unsigned int x, unsigned int y) const {
     return empty_val;
 }
 
-void Board::updateBound(unsigned long start_x, unsigned long start_y, unsigned long size_x, unsigned long size_y) {
+void Board::updateBound(ulong start_x, ulong start_y, ulong size_x, ulong size_y) {
     if (bound.min_x > start_x) {
         bound.min_x = start_x;
     }
@@ -56,27 +59,20 @@ void Board::updateBound(unsigned long start_x, unsigned long start_y, unsigned l
     //cout << bound.min_x << " ," << bound.min_y << " ," << bound.size_x << " ," << bound.size_y << endl;
 }
 
-void Board::post(unsigned int row, unsigned int column, Direction direction, const std::string &message) {
-    unsigned int length = message.length();
+void Board::post(uint row, uint column, Direction direction, const std::string &message) {
+    uint length = message.length();
     if (length == 0) {
         throw invalid_argument{"Cannot post message of length : 0"};
     }
 
-    // if (bound.min_x > column) {
-    //     bound.min_x = column;
-    // }
-
-    // if (bound.max_x < column + length) {
-    // }
-
-    unsigned int addx = direction == Direction::Horizontal ? 1 : 0;
-    unsigned int addy = direction == Direction::Vertical ? 1 : 0;
+    uint addx = direction == Direction::Horizontal ? 1 : 0;
+    uint addy = direction == Direction::Vertical ? 1 : 0;
 
     updateBound(column, row, length * addx, length * addy);
 
-    for (unsigned int i = 0; i < length; i++) {
-        unsigned int x = column + i * addx;
-        unsigned int y = row + i * addy;
+    for (uint i = 0; i < length; i++) {
+        uint x = column + i * addx;
+        uint y = row + i * addy;
 
         //cout << "post :: " << (int)direction << " :: " << x << " ," << y;
 
@@ -85,17 +81,17 @@ void Board::post(unsigned int row, unsigned int column, Direction direction, con
     }
 }
 
-std::string Board::read(unsigned int row, unsigned int column, Direction direction, unsigned int length) const {
+std::string Board::read(uint row, uint column, Direction direction, uint length) const {
     if (length == 0) {
         throw invalid_argument{"Cannot read message of length : 0"};
     }
-    unsigned int addx = direction == Direction::Horizontal ? 1 : 0;
-    unsigned int addy = direction == Direction::Vertical ? 1 : 0;
+    uint addx = direction == Direction::Horizontal ? 1 : 0;
+    uint addy = direction == Direction::Vertical ? 1 : 0;
 
     string message;
-    for (unsigned int i = 0; i < length; i++) {
-        unsigned int x = column + i * addx;
-        unsigned int y = row + i * addy;
+    for (uint i = 0; i < length; i++) {
+        uint x = column + i * addx;
+        uint y = row + i * addy;
 
         message += charAt(x, y);
 
@@ -109,9 +105,9 @@ void Board::show() const {
         return;
     }
 
-    unsigned int length = bound.size_x + 4;
-    for (unsigned int i = 0; i < bound.size_y + 2; i++) {
-        unsigned int y = bound.min_y + i - 1;
+    uint length = bound.size_x + 4;
+    for (uint i = 0; i < bound.size_y + 2; i++) {
+        uint y = bound.min_y + i - 1;
         cout << read(y, bound.min_x - 2, Direction::Horizontal, length) << endl;
     }
 }
