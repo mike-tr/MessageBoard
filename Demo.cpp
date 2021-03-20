@@ -28,7 +28,7 @@ int main() {
     board.show();
 
     cout << endl;
-    board.post(110, 210, Direction::Horizontal, "iam do not belong");
+    board.post(110, 210, Direction::Horizontal, "i do not belong here");
     board.show();
 
     // cout << board.read(/*row=*/99, /*column=*/201, Direction::Vertical, /*length=*/3) << endl;
