@@ -58,6 +58,9 @@
 </div>
 
 How to run TEST:
+
 dos2unix grade 
+
 dos2unix grade_utils 
+
 bash grade
