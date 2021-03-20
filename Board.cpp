@@ -115,7 +115,7 @@ void Board::show() const {
     for (uint i = 0; i < bound.size_y + 2; i++) {
         //cout << length << endl;
         uint y = bound.min_y + i - 1;
-        cout << read(y, bound.min_x - 2, Direction::Horizontal, length) << endl;
+        cout << y << ": " << read(y, bound.min_x - 2, Direction::Horizontal, length) << endl;
     }
 }
 

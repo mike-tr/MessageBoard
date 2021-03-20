@@ -17,6 +17,7 @@ using namespace std;
 
 int main() {
     ariel::Board board;
+
     board.post(/*row=*/100, /*column=*/200, Direction::Horizontal, "abcde");
     board.post(/*row=*/98, /*column=*/202, Direction::Vertical, "abcde");
     board.show();
