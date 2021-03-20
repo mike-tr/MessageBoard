@@ -184,31 +184,31 @@ TEST_CASE("Test random mamble wrong direction") {
 //     CHECK(board.read(123, 123, Direction::Vertical, 3) == ref.read(123, 123, Direction::Vertical, 3));
 // }
 
-TEST_CASE("END OF THE INTEGER") {
-    /**
-     * this test check's whether the board is indeed infinite.
-     * a.k.a it should be possible to read from -1 the last index.
-     * */
+// TEST_CASE("END OF THE INTEGER") {
+//     /**
+//      * this test check's whether the board is indeed infinite.
+//      * a.k.a it should be possible to read from -1 the last index.
+//      * */
 
-    string empty = "";
-    for (unsigned int i = 1; i < number_of_tests; i++) {
-        Board board;
-        unsigned int rand_y = (unsigned int)rand();
-        unsigned int rand_x = (unsigned int)rand();
+//     string empty = "";
+//     for (unsigned int i = 1; i < number_of_tests; i++) {
+//         Board board;
+//         unsigned int rand_y = (unsigned int)rand();
+//         unsigned int rand_x = (unsigned int)rand();
 
-        unsigned int max_v = (unsigned int)(-1);
+//         unsigned int max_v = (unsigned int)(-1);
 
-        empty += "_";
-        CHECK(board.read(rand_y, max_v, Direction::Vertical, i) == empty);
-        CHECK(board.read(max_v, rand_x, Direction::Vertical, i) == empty);
+//         empty += "_";
+//         CHECK(board.read(rand_y, max_v, Direction::Vertical, i) == empty);
+//         CHECK(board.read(max_v, rand_x, Direction::Vertical, i) == empty);
 
-        // POST on the edge of the screen!
-        board.post(rand_y, max_v, Direction::Vertical, "abc");
-        CHECK(board.read(rand_y, max_v, Direction::Vertical, 3) == "abc");
+//         // POST on the edge of the screen!
+//         board.post(rand_y, max_v, Direction::Vertical, "abc");
+//         CHECK(board.read(rand_y, max_v, Direction::Vertical, 3) == "abc");
 
-        board.post(max_v, rand_x, Direction::Horizontal, "abc");
-        CHECK(board.read(max_v, rand_x, Direction::Horizontal, 3) == "abc");
-    }
-}
+//         board.post(max_v, rand_x, Direction::Horizontal, "abc");
+//         CHECK(board.read(max_v, rand_x, Direction::Horizontal, 3) == "abc");
+//     }
+// }
 
 /* Add more test cases here */
