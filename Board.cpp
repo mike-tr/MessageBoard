@@ -111,11 +111,18 @@ void Board::show() const {
     }
 
     //cout << "Bound {" << bound.min_x << " ," << bound.min_y << " :: " << bound.size_x << " ," << bound.size_y << " }" << endl;
+
+    uint pre_length = to_string(bound.min_y + bound.size_y + 2).length() + 2;
     uint length = bound.size_x + 4;
     for (uint i = 0; i < bound.size_y + 2; i++) {
         //cout << length << endl;
         uint y = bound.min_y + i - 1;
-        cout << y << ": " << read(y, bound.min_x - 2, Direction::Horizontal, length) << endl;
+
+        auto space = to_string(y) + ": ";
+        while (space.length() < pre_length) {
+            space += " ";
+        }
+        cout << space << read(y, bound.min_x - 2, Direction::Horizontal, length) << endl;
     }
 }
 

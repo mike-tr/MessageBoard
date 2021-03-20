@@ -18,18 +18,22 @@ using namespace std;
 int main() {
     ariel::Board board;
 
-    board.post(/*row=*/100, /*column=*/200, Direction::Horizontal, "abcde");
-    board.post(/*row=*/98, /*column=*/202, Direction::Vertical, "abcde");
+    board.post(/*row=*/1000, /*column=*/200, Direction::Horizontal, "abcde");
+    board.post(/*row=*/998, /*column=*/202, Direction::Vertical, "abcde");
     board.show();
 
     cout << endl;
-    board.post(/*row=*/102, /*column=*/200, Direction::Horizontal, "?-?-?-?");
-    board.post(/*row=*/98, /*column=*/205, Direction::Vertical, "12345");
+    board.post(/*row=*/1002, /*column=*/200, Direction::Horizontal, "?-?-?-?");
+    board.post(/*row=*/998, /*column=*/205, Direction::Vertical, "12345");
     board.show();
 
     cout << endl;
-    board.post(110, 210, Direction::Horizontal, "i do not belong here");
+    board.post(1010, 210, Direction::Horizontal, "i do not belong here");
     board.show();
+
+    const ariel::Board &ref = board;
+    //ref.post(/*row=*/1000, /*column=*/200, Direction::Horizontal, "abcde"); // illigal
+    ref.show();
 
     // cout << board.read(/*row=*/99, /*column=*/201, Direction::Vertical, /*length=*/3) << endl;
     // // prints "_b_" (starts at row 99 which is empty; then at row 100 there is "b"; then row 101 is empty again).
