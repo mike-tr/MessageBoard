@@ -125,6 +125,7 @@ TEST_CASE("Test multiple boards") {
         unsigned int rand_y = (unsigned int)rand();
         unsigned int rand_x = (unsigned int)rand();
 
+        // check that posting on A doesnt affect B and vise versa.
         boardA.post(rand_y, rand_x, Direction::Horizontal, message);
         CHECK(boardB.read(rand_y, rand_x, Direction::Horizontal, i) == empty);
         CHECK(boardB.read(rand_y, rand_x, Direction::Vertical, i) == empty);
