@@ -16,14 +16,14 @@ typedef unsigned long ulong;
  * hence i must put a character in each and every place i create.
  * */
 void Board::setCharAt(uint x, uint y, char c) {
-    board[make_tuple(x, y)] = c;
+    board[{x, y}] = c;
 }
 
 /**
  * this method returns the actuall character on x,y but if its empty it will return "_";
  * */
 char Board::charAt(uint x, uint y) const {
-    auto key = make_tuple(x, y);
+    auto key = make_pair(x, y);
     if (board.count(key) == 1) {
         return board.at(key);
     }
@@ -35,6 +35,15 @@ char Board::charAt(uint x, uint y) const {
  * this is used to know with part of the board to "show".
  * */
 void Board::updateBound(ulong start_x, ulong start_y, ulong size_x, ulong size_y) {
+    //cout << start_x << " : " << start_y << " : " << size_x << " : " << size_y << endl;
+    if (start_x > bound.min_x) {
+        size_x += start_x - bound.min_x;
+    }
+
+    if (start_y > bound.min_y) {
+        size_y += start_y - bound.min_y;
+    }
+
     if (bound.min_x > start_x) {
         bound.min_x = start_x;
     }
@@ -101,8 +110,10 @@ void Board::show() const {
         return;
     }
 
+    //cout << "Bound {" << bound.min_x << " ," << bound.min_y << " :: " << bound.size_x << " ," << bound.size_y << " }" << endl;
     uint length = bound.size_x + 4;
     for (uint i = 0; i < bound.size_y + 2; i++) {
+        //cout << length << endl;
         uint y = bound.min_y + i - 1;
         cout << read(y, bound.min_x - 2, Direction::Horizontal, length) << endl;
     }

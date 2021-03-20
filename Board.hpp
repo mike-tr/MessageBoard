@@ -24,7 +24,7 @@ class Board {
 private:
     static char empty_val;
     Bound bound;
-    std::map<std::tuple<unsigned int, unsigned int>, char>
+    std::map<std::pair<unsigned int, unsigned int>, char>
         board;
     void setCharAt(unsigned int x, unsigned int y, char c);
     char charAt(unsigned int x, unsigned int y) const;
