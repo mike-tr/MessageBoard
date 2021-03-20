@@ -35,6 +35,11 @@ int main() {
     //ref.post(/*row=*/1000, /*column=*/200, Direction::Horizontal, "abcde"); // illigal
     ref.show();
 
+    cout << endl;
+    ariel::Board board2;
+    board2.post(/*row=*/(unsigned int)-1, /*column=*/(unsigned int)-1, Direction::Horizontal, "abcde");
+    board2.show();
+
     // cout << board.read(/*row=*/99, /*column=*/201, Direction::Vertical, /*length=*/3) << endl;
     // // prints "_b_" (starts at row 99 which is empty; then at row 100 there is "b"; then row 101 is empty again).
     // board.post(/*row=*/99, /*column=*/202, Direction::Vertical, "xyz");

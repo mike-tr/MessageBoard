@@ -31,15 +31,18 @@ char Board::charAt(uint x, uint y) const {
 }
 
 /**
- * this function updates the Max visable latter on the board and the min visable position
- * this is used to know with part of the board to "show".
+* given the start and end position of the newest message calculate the new bound of the "show" square.
  * */
 void Board::updateBound(ulong start_x, ulong start_y, ulong size_x, ulong size_y) {
     //cout << start_x << " : " << start_y << " : " << size_x << " : " << size_y << endl;
+
+    // if the new message starts after the min value then we need to offset the 'real' length of the message.
+    // end  = new_start - old_start + length.
     if (start_x > bound.min_x) {
         size_x += start_x - bound.min_x;
     }
 
+    // same but for the y axis.
     if (start_y > bound.min_y) {
         size_y += start_y - bound.min_y;
     }
@@ -64,8 +67,12 @@ void Board::updateBound(ulong start_x, ulong start_y, ulong size_x, ulong size_y
 void Board::post(uint row, uint column, Direction direction, const std::string &message) {
     uint length = message.length();
     if (length == 0) {
-        throw invalid_argument{"Cannot post message of length : 0"};
+        // do nothing
+        return;
     }
+    // if (length == 0) {
+    //     throw invalid_argument{"Cannot post message of length : 0"};
+    // }
 
     if (direction == Direction::Horizontal) {
         updateBound(column, row, length, 1);
@@ -86,8 +93,11 @@ void Board::post(uint row, uint column, Direction direction, const std::string &
 
 std::string Board::read(uint row, uint column, Direction direction, uint length) const {
     if (length == 0) {
-        throw invalid_argument{"Cannot read message of length : 0"};
+        return "";
     }
+    // if (length == 0) {
+    //     throw invalid_argument{"Cannot read message of length : 0"};
+    // }
 
     string message;
     if (direction == Direction::Horizontal) {

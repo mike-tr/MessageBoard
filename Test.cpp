@@ -80,7 +80,7 @@ TEST_CASE("Test post, read on random messages as well as empty spaces ( main tes
     }
 }
 
-TEST_CASE("Test throw length 0") {
+TEST_CASE("Test length 0") {
     /**
      * we do not want to allow posting empty string, and we dont want to allow reading string of size 0.
      * the latter might be possible, but posting empty string is a big NO NO.
@@ -90,11 +90,55 @@ TEST_CASE("Test throw length 0") {
         unsigned int rand_y = (unsigned int)rand();
         unsigned int rand_x = (unsigned int)rand();
 
-        CHECK_THROWS(board.read(rand_y, rand_x, Direction::Vertical, 0));
-        CHECK_THROWS(board.read(rand_y, rand_x, Direction::Horizontal, 0));
+        CHECK(board.read(rand_y, rand_x, Direction::Horizontal, 0) == "");
+        CHECK_NOTHROW(board.post(rand_y, rand_x, Direction::Horizontal, ""));
+        CHECK(board.read(rand_y, rand_x, Direction::Horizontal, 1) == "_");
 
-        CHECK_THROWS(board.post(rand_y, rand_x, Direction::Horizontal, ""));
-        CHECK_THROWS(board.post(rand_y, rand_x, Direction::Horizontal, ""));
+        CHECK_NOTHROW(board.post(rand_y, rand_x, Direction::Horizontal, "a"));
+        CHECK_NOTHROW(board.post(rand_y, rand_x, Direction::Horizontal, ""));
+        CHECK(board.read(rand_y, rand_x, Direction::Horizontal, 1) == "a");
+
+        board = Board();
+        CHECK(board.read(rand_y, rand_x, Direction::Vertical, 0) == "");
+        CHECK_NOTHROW(board.post(rand_y, rand_x, Direction::Vertical, ""));
+        CHECK(board.read(rand_y, rand_x, Direction::Vertical, 1) == "_");
+
+        CHECK_NOTHROW(board.post(rand_y, rand_x, Direction::Vertical, "a"));
+        CHECK_NOTHROW(board.post(rand_y, rand_x, Direction::Vertical, ""));
+        CHECK(board.read(rand_y, rand_x, Direction::Vertical, 1) == "a");
+    }
+}
+
+TEST_CASE("Test multiple boards") {
+    // test that content from boardA do not appear on board B
+    Board boardA;
+    Board boardB;
+
+    srand(time(nullptr));
+
+    string empty = "";
+    string message = "";
+    for (unsigned int i = 1; i < number_of_tests + 1; i++) {
+        message += '0' + rand() % range;
+        empty += "_";
+
+        unsigned int rand_y = (unsigned int)rand();
+        unsigned int rand_x = (unsigned int)rand();
+
+        boardA.post(rand_y, rand_x, Direction::Horizontal, message);
+        CHECK(boardB.read(rand_y, rand_x, Direction::Horizontal, i) == empty);
+        CHECK(boardB.read(rand_y, rand_x, Direction::Vertical, i) == empty);
+        boardB.post(rand_y, rand_x, Direction::Horizontal, empty);
+        CHECK(boardA.read(rand_y, rand_x, Direction::Horizontal, i) == message);
+
+        // reset BoardA.
+        boardA = Board();
+
+        boardB.post(rand_y, rand_x, Direction::Vertical, message);
+        CHECK(boardA.read(rand_y, rand_x, Direction::Horizontal, i) == empty);
+        CHECK(boardA.read(rand_y, rand_x, Direction::Vertical, i) == empty);
+        boardA.post(rand_y, rand_x, Direction::Vertical, empty);
+        CHECK(boardB.read(rand_y, rand_x, Direction::Vertical, i) == message);
     }
 }
 
