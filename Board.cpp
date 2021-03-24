@@ -70,9 +70,6 @@ void Board::post(uint row, uint column, Direction direction, const std::string &
         // do nothing
         return;
     }
-    // if (length == 0) {
-    //     throw invalid_argument{"Cannot post message of length : 0"};
-    // }
 
     if (direction == Direction::Horizontal) {
         updateBound(column, row, length, 1);

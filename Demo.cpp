@@ -13,8 +13,6 @@ using ariel::Direction;
 #include <stdexcept>
 using namespace std;
 
-#include <vector>
-
 int main() {
     ariel::Board board;
 
@@ -37,8 +35,18 @@ int main() {
 
     cout << endl;
     ariel::Board board2;
-    board2.post(/*row=*/(unsigned int)-1, /*column=*/(unsigned int)-1, Direction::Horizontal, "abcde");
+    board2.post(/*row=*/(unsigned int)-3, /*column=*/(unsigned int)-3, Direction::Horizontal, "abcde12314");
     board2.show();
+
+    // tuple<int, int> t = {1, 2};
+    // test[t] = 10;
+    // int &v = std::get<0>(t);
+    // cout << std::get<0>(t) << " ," << std::get<1>(t) << endl;
+    // cout << " m : " << test[t] << endl;
+    // v = 10;
+    // cout << std::get<0>(t) << " ," << std::get<1>(t) << endl;
+    // cout << " m : " << test[{1, 2}] << endl;
+    // cout << " m : " << test[t] << endl;
 
     // cout << board.read(/*row=*/99, /*column=*/201, Direction::Vertical, /*length=*/3) << endl;
     // // prints "_b_" (starts at row 99 which is empty; then at row 100 there is "b"; then row 101 is empty again).
