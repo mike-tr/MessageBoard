@@ -67,7 +67,7 @@ void Board::updateBound(ulong start_x, ulong start_y, ulong size_x, ulong size_y
 void Board::post(uint row, uint column, Direction direction, const std::string &message) {
     uint length = message.length();
     if (length == 0) {
-        // do nothing
+        // do nothing, We have this check because we do not want to recalculate bound.
         return;
     }
 
@@ -89,13 +89,6 @@ void Board::post(uint row, uint column, Direction direction, const std::string &
 }
 
 std::string Board::read(uint row, uint column, Direction direction, uint length) const {
-    if (length == 0) {
-        return "";
-    }
-    // if (length == 0) {
-    //     throw invalid_argument{"Cannot read message of length : 0"};
-    // }
-
     string message;
     if (direction == Direction::Horizontal) {
         for (uint i = 0; i < length; i++) {
