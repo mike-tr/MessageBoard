@@ -36,6 +36,7 @@ int main() {
     cout << endl;
     ariel::Board board2;
     board2.post(/*row=*/(unsigned int)-3, /*column=*/(unsigned int)-3, Direction::Horizontal, "abcde12314");
+    board2.post(/*row=*/(unsigned int)-1, /*column=*/(unsigned int)-3, Direction::Horizontal, "888----123-2");
     board2.show();
 
     // tuple<int, int> t = {1, 2};
