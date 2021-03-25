@@ -7,24 +7,30 @@ VALGRIND_FLAGS=-v --leak-check=full --show-leak-kinds=all  --error-exitcode=99
 SOURCES=Board.cpp
 OBJECTS=$(subst .cpp,.o,$(SOURCES))
 
-run: demo
+run: test
 	./$^
 
-demo: Demo.o $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $^ -o demo
-
-test: TestCounter.o Test.o $(OBJECTS)
+test: TestRunner.o StudentTest1.o StudentTest2.o $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $^ -o test
 
-tidy:
-	clang-tidy $(SOURCES) -checks=bugprone-*,clang-analyzer-*,cppcoreguidelines-*,performance-*,portability-*,readability-* --warnings-as-errors=-* --
+main: Main.o $(OBJECTS)
+	$(CXX) $(CXXFLAGS) $^ -o main
 
-valgrind: demo test
-	valgrind --tool=memcheck $(VALGRIND_FLAGS) ./demo 2>&1 | { egrep "lost| at " || true; }
-	valgrind --tool=memcheck $(VALGRIND_FLAGS) ./test 2>&1 | { egrep "lost| at " || true; }
-
-%.o: %.cpp
+%.o: %.cpp $(HEADERS)
 	$(CXX) $(CXXFLAGS) --compile $< -o $@
 
+StudentTest1.cpp:  # Shani Shuv
+	curl https://raw.githubusercontent.com/ShaniShuv/cppm2/master/Test.cpp > $@
+
+StudentTest2.cpp:  # Reut Maslansky
+	curl https://raw.githubusercontent.com/Reut-Maslansky/Ariel-CPP--ex2/master/Test.cpp > $@
+
+tidy:
+	clang-tidy $(SOURCES) -checks=bugprone-*,clang-analyzer-*,cppcoreguidelines-*,performance-*,portability-*,readability-*,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-owning-memory --warnings-as-errors=-* --
+
+valgrind: test
+	valgrind --leak-check=full --error-exitcode=99 --tool=memcheck $(VALGRIND_FLAGS) ./test 
+
 clean:
-	rm -f *.o demo test
+	rm -f *.o test
+	rm -f StudentTest*.cpp
